@@ -1,0 +1,2 @@
+global using simple_dotnet_core_7_crud.Models;
+global using simple_dotnet_core_7_crud.Dtos.Character;
