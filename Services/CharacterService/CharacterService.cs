@@ -53,10 +53,6 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
 
                 _mapper.Map(updatedCharacter, character);
 
-                // character.HitPoints = updatedCharacter.HitPoints;
-                // character.Strength = updatedCharacter.Strength;
-                // character.Defense = updatedCharacter.Defense;
-                // character.Intelligence = updatedCharacter.Intelligence;
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetCharacterResponseDto>(character);
             }
@@ -91,6 +87,14 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
                 serviceResponse.Message = ex.Message;
             }
 
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetCharacterResponseDto>>> GetPersonalizeCharacterList(int userId)
+        {
+            ServiceResponse<List<GetCharacterResponseDto>> serviceResponse = new ServiceResponse<List<GetCharacterResponseDto>>();
+            List<Character> dbCharacters = await _context.Characters.Where(c => c.User!.Id == userId).ToListAsync();
+            serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterResponseDto>(c)).ToList();
             return serviceResponse;
         }
     }

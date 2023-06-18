@@ -1,8 +1,11 @@
 using simple_dotnet_core_7_crud.Services.CharacterService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace simple_dotnet_core_7_crud.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
@@ -14,12 +17,14 @@ namespace simple_dotnet_core_7_crud.Controllers
             this._characterService = characterService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterResponseDto>>>> GetCharacterList()
         {
             return Ok(await _characterService.GetCharacterList());
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterResponseDto>>> GetCharacter(int id)
         {
@@ -54,6 +59,13 @@ namespace simple_dotnet_core_7_crud.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpGet("personalize")]
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterResponseDto>>>> GetPersonalizeCharacterList()
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+            return Ok(await _characterService.GetPersonalizeCharacterList(userId));
         }
     }
 }
