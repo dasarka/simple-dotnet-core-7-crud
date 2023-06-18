@@ -1,4 +1,4 @@
-namespace simple_dotnet_core_7_crud.Dtos.Character
+namespace simple_dotnet_core_7_crud.DTOs.Character
 {
     public class GetCharacterResponseDto
     {
