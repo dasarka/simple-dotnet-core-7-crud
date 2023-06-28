@@ -11,5 +11,6 @@ namespace simple_dotnet_core_7_crud.Models
         public string? Description { get; set; }
         public RpgClass Class { get; set; } = RpgClass.Knight;
         public User? User { get; set; }
+        public Weapon? Weapon { get; set; }
     }
 }

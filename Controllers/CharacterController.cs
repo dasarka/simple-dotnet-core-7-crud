@@ -24,7 +24,6 @@ namespace simple_dotnet_core_7_crud.Controllers
             return Ok(await _characterService.GetCharacterList());
         }
 
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterResponseDto>>> GetCharacter(int id)
         {
@@ -64,8 +63,7 @@ namespace simple_dotnet_core_7_crud.Controllers
         [HttpGet("personalize")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterResponseDto>>>> GetPersonalizeCharacterList()
         {
-            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
-            return Ok(await _characterService.GetPersonalizeCharacterList(userId));
+            return Ok(await _characterService.GetPersonalizeCharacterList());
         }
     }
 }
