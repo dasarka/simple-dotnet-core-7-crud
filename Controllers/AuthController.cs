@@ -32,7 +32,7 @@ namespace simple_dotnet_core_7_crud.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
         {
-            ServiceResponse<string> response = await _authRepo.Login(request.Username, request.Password);
+            ServiceResponse<string> response = await _authRepo.Login(request.Username!, request.Password!);
 
             if (!response.Success)
             {
