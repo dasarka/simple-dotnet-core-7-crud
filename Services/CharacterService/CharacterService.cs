@@ -1,5 +1,5 @@
-using System.Security.Claims;
-using AutoMapper;
+using simple_dotnet_core_7_crud.Common.HttpProfile;
+using simple_dotnet_core_7_crud.DTOs.Character;
 
 namespace simple_dotnet_core_7_crud.Services.CharacterService
 {
@@ -7,17 +7,14 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpProfile _httpProfile;
 
-        public CharacterService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
+        public CharacterService(IMapper mapper, DataContext context, IHttpProfile httpProfile)
         {
-            this._httpContextAccessor = httpContextAccessor;
+            this._httpProfile = httpProfile;
             this._context = context;
             this._mapper = mapper;
         }
-
-        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User
-                .FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public async Task<ServiceResponse<List<GetCharacterResponseDto>>> GetCharacterList()
         {
@@ -31,7 +28,7 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
         {
             ServiceResponse<GetCharacterResponseDto> serviceResponse = new ServiceResponse<GetCharacterResponseDto>();
             Character? character = await _context.Characters
-                    .FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId());
+                    .FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == _httpProfile.GetUserId());
             serviceResponse.Data = _mapper.Map<GetCharacterResponseDto>(character);
             return serviceResponse;
         }
@@ -40,13 +37,13 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
         {
             ServiceResponse<List<GetCharacterResponseDto>> serviceResponse = new ServiceResponse<List<GetCharacterResponseDto>>();
             Character character = _mapper.Map<Character>(newCharacter);
-            character.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
+            character.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == _httpProfile.GetUserId());
 
             _context.Characters.Add(character);
             await _context.SaveChangesAsync();
 
             serviceResponse.Data = await _context.Characters
-                .Where(c => c.User!.Id == GetUserId())
+                .Where(c => c.User!.Id == _httpProfile.GetUserId())
                 .Select(c => _mapper.Map<GetCharacterResponseDto>(c))
                 .ToListAsync();
             return serviceResponse;
@@ -61,7 +58,7 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
                     .Include(c => c.User)
                     .FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
 
-                if (character is null || character.User?.Id != GetUserId())
+                if (character is null || character.User?.Id != _httpProfile.GetUserId())
                 {
                     throw new Exception($"Character with Id '{updatedCharacter.Id}' not found");
                 }
@@ -86,7 +83,7 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
             try
             {
                 Character? character = await _context.Characters
-                    .FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId());
+                    .FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == _httpProfile.GetUserId());
                 if (character is null)
                 {
                     throw new Exception($"Character with Id '{id}' not found");
@@ -96,7 +93,7 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
                 await _context.SaveChangesAsync();
 
                 serviceResponse.Data = await _context.Characters
-                    .Where(c => c.User!.Id == GetUserId())
+                    .Where(c => c.User!.Id == _httpProfile.GetUserId())
                     .Select(c => _mapper.Map<GetCharacterResponseDto>(c))
                     .ToListAsync();
             }
@@ -113,7 +110,7 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
         {
             ServiceResponse<List<GetCharacterResponseDto>> serviceResponse = new ServiceResponse<List<GetCharacterResponseDto>>();
             List<Character> dbCharacters = await _context.Characters
-                .Where(c => c.User!.Id == GetUserId())
+                .Where(c => c.User!.Id == _httpProfile.GetUserId())
                 .ToListAsync();
             serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterResponseDto>(c)).ToList();
             return serviceResponse;

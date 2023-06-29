@@ -4,11 +4,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddDatabaseExtension();
 builder.AddApiExtension();
+builder.AddAuthenticationExtension();
 builder.AddSwaggerExtension();
 builder.AddMapperExtension();
-builder.AddServiceExtension();
-
-
+builder.AddApplicationExtension();
 builder.AddHttpExtension();
 
 var app = builder.Build();

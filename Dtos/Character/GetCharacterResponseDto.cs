@@ -1,3 +1,5 @@
+using simple_dotnet_core_7_crud.DTOs.Weapon;
+
 namespace simple_dotnet_core_7_crud.DTOs.Character
 {
     public class GetCharacterResponseDto
@@ -10,5 +12,6 @@ namespace simple_dotnet_core_7_crud.DTOs.Character
         public int Intelligence { get; set; } = 10;
         public string? Description { get; set; }
         public RpgClass Class { get; set; } = RpgClass.Knight;
+        public GetWeaponResponseDto? Weapon { get; set; }
     }
 }

@@ -1,3 +1,5 @@
+using simple_dotnet_core_7_crud.DTOs.Character;
+
 namespace simple_dotnet_core_7_crud.Services.CharacterService
 {
     public interface ICharacterService

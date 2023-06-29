@@ -2,6 +2,7 @@ using simple_dotnet_core_7_crud.Services.CharacterService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using simple_dotnet_core_7_crud.DTOs.Character;
 
 namespace simple_dotnet_core_7_crud.Controllers
 {
