@@ -10,5 +10,6 @@ namespace simple_dotnet_core_7_crud.Services.CharacterService
         Task<ServiceResponse<GetCharacterResponseDto>> UpdateCharacter(UpdateCharacterRequestDto updatedCharacter);
         Task<ServiceResponse<List<GetCharacterResponseDto>>> DeleteCharacter(int id);
         Task<ServiceResponse<List<GetCharacterResponseDto>>> GetPersonalizeCharacterList();
+        Task<ServiceResponse<GetCharacterResponseDto>> AddCharacterSkill(AddCharacterSkillRequestDto newCharacterSkill);
     }
 }

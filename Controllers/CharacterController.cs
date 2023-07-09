@@ -66,5 +66,12 @@ namespace simple_dotnet_core_7_crud.Controllers
         {
             return Ok(await _characterService.GetPersonalizeCharacterList());
         }
+
+        [HttpPost("skill")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterResponseDto>>> AddCharacterSkill(
+            AddCharacterSkillRequestDto newCharacterSkill)
+        {
+            return Ok(await _characterService.AddCharacterSkill(newCharacterSkill));
+        }
     }
 }
